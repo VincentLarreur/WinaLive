@@ -1,0 +1,29 @@
+{
+    "name": "WinaLive",
+    "version": "1.0",
+    "description": "Notify Live & Freeroll and let you participate to Winamax Quiz in Chat",
+    "author": "Vincent Larreur",
+    "permissions":
+    [
+      "storage",
+      "http://winamax.fr/"
+    ],
+    "background": {
+      "scripts": ["js/background.js"],
+      "persistent": true
+    },
+    "browser_action": {
+      "default_popup": "html/popup.html",
+      "default_icon": {
+        "32": "images/WinaLiveOff32x32.png"
+      }
+    },
+    "icons": {
+      "16": "images/WinaLive16x16.png",
+      "32": "images/WinaLiveOff32x32.png",
+      "48": "images/WinaLive48x48.png",
+      "128": "images/WinaLive128x128.png"
+    },
+    "manifest_version": 2,
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

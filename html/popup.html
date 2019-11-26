@@ -1,0 +1,72 @@
+<html id="html" style="width:400px; height:360px">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../css/popup.css">
+    </head>
+    <body>
+        <div>
+            <a id="winalive" target="_blank" href="https://www.winamax.fr/winamax-tv">
+                <div class="box cya-color">
+                    <div class="box-text">
+                        <div class="text">WinaLive</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="box infos">
+            <div class="box-icon">
+                <img style="height:80px;" src="../images/WinaLiveWhite128x128.png" alt="icone du live">
+            </div>
+            <div class="box-live">
+                <div class="box-title">
+                    Pas d'info sur le prochain live
+                </div>
+                <div class="box-msg">
+                    <div class="text" id="sub-live">Dernier live : 01/01/2017</div>
+                </div>
+            </div>
+        </div>
+        <div class="box infos border-before" id="divFreeroll">
+            <div class="box-icon">
+                <img style="height:70px;" src="../images/WinaFreeroll.png" alt="icone Freeroll">
+            </div>
+            <div class="box-live">
+                <div class="box-title" id="textFreeroll">
+                    Pas d'info sur le prochain freeroll
+                </div>
+                <div class="box-msg">
+                  <div class="text" id="sub-freeroll">Enregistrement Anticipé 30min</div>
+                    <div class="text" id="sub-freeroll">Enregistrement Tardif 24min</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box border-before">
+            <div class="left">
+                Live
+                <input id="notif" type="checkbox" class="tgl tgl-skewed"/>
+                <label data-tg-off="OFF" data-tg-on="ON" for="notif" class="tgl-btn"></label>
+            </div>
+            <div class="center">
+                Quiz
+                <input id="quiz" type="checkbox" class="tgl tgl-skewed"/>
+                <label data-tg-off="OFF" data-tg-on="ON" for="quiz" class="tgl-btn"></label>
+            </div>
+            <div class="center">
+                FreeRoll
+                <input id="freeroll" type="checkbox" class="tgl tgl-skewed"/>
+                <label data-tg-off="OFF" data-tg-on="ON" for="freeroll" class="tgl-btn"></label>
+            </div>
+            <div class="right">
+                Tickets
+                <input id="tickets" type="checkbox" class="tgl tgl-skewed"/>
+                <label data-tg-off="OFF" data-tg-on="ON" for="tickets" class="tgl-btn"></label>
+            </div>
+        </div>
+
+        <a class="smallbox quiz" style="">
+                Réponds ici à la question !
+        </a>
+        <script src="../js/storage.js"></script>
+    </body>
+</html>

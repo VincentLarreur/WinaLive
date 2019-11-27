@@ -18,6 +18,7 @@ var msecPerHour = msecPerMinute * 60;
 
 function handleFreeroll(e)
 {
+  console.log("--HANDLE FREEROLL--\n");
   if(e)
   {
     html.style.height = "360px";
@@ -68,6 +69,7 @@ function handleFreeroll(e)
 
 function handleLive(e)
 {
+  console.log("--HANDLE LIVE--\n");
   //chopper le planning pour avoir le live courrant ou le prochain
   if(e) //ON
   {
@@ -82,7 +84,7 @@ function handleLive(e)
   }
 }
 
-chrome.storage.sync.get(['notif','quiz','freeroll','tickets','live'],function(res)
+chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive'],function(res)
 {
   //--------------------------------INIT------------------------------------------------
   if(!res.hasOwnProperty('notif')) //initialisation à True du Setting de notification
@@ -101,10 +103,16 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','live'],function(re
   {
        res.tickets = false;
   }
+  if(!res.hasOwnProperty('slive')) //initialisation à True du Setting de tickets
+  {
+       res.slive = false;
+       chrome.storage.sync.set({slive : live});
+  }
+
+  //--------------------------------------Update HTML Informations-------------------------------------------------
 
   //handlePlanning();
-
-  handleLive(res.live);
+  handleLive(res.slive);
 
   handleFreeroll(res.freeroll);
 

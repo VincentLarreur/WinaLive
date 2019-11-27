@@ -18,7 +18,7 @@ var msecPerHour = msecPerMinute * 60;
 
 function handleFreeroll(e)
 {
-  console.log("--HANDLE FREEROLL--\n");
+  console.log("--HANDLE FREEROLL--");
   if(e)
   {
     html.style.height = "360px";
@@ -69,7 +69,7 @@ function handleFreeroll(e)
 
 function handleLive(e)
 {
-  console.log("--HANDLE LIVE--\n");
+  console.log("--HANDLE LIVE--");
   //chopper le planning pour avoir le live courrant ou le prochain
   if(e) //ON
   {

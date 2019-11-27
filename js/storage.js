@@ -68,6 +68,7 @@ function handleFreeroll(e)
 
 function handleLive(e)
 {
+  //chopper le planning pour avoir le live courrant ou le prochain
   if(e) //ON
   {
     cyacolor.style.background = 'linear-gradient(to right, #ffffff 0%, #CDDF8F 0%, #9CCF70 50%, #6BBF51 100%';
@@ -100,6 +101,8 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','live'],function(re
   {
        res.tickets = false;
   }
+
+  //handlePlanning();
 
   handleLive(res.live);
 

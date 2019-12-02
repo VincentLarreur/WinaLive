@@ -14,6 +14,22 @@ a
     cursor: pointer;
 }
 
+#container
+{
+  width:400px;
+  height:435px;
+  overflow:hidden;     /* if you don't want a scrollbar, set to hidden */
+  overflow-x:hidden;   /* hides horizontal scrollbar on newer browsers */
+}
+
+#WinaMaxConnectionIframe
+{
+  width:400px;       /* set this to approximate width of entire page you're embedding */
+  height:1000px;      /* determines where the bottom of the page cuts off */
+  margin-top:-110px;  /* clipping top of page */
+  overflow:hidden;
+}
+
 .cya-color
 {
     background: linear-gradient(to right, #ffffff 0%, #C56B6B 0%, #B45055 50%, #a3353e 100%);

@@ -1,4 +1,4 @@
-<html id="html" style="width:400px; height:360px">
+<html id="html" style="width:400px; height:280px">
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="../css/popup.css">
@@ -13,7 +13,7 @@
                 </div>
             </a>
         </div>
-        <div class="box infos">
+        <div class="box infos" id="divLive">
             <div class="box-icon">
                 <img style="height:80px;" src="../images/WinaLiveWhite128x128.png" alt="icone du live">
             </div>
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-        <div class="box border-before">
+        <div class="box border-before" id="divButtons">
             <div class="left">
                 Notifs
                 <input id="notif" type="checkbox" class="tgl tgl-skewed"/>
@@ -63,9 +63,15 @@
                 <label data-tg-off="OFF" data-tg-on="ON" for="tickets" class="tgl-btn"></label>
             </div>
         </div>
-
-        <a class="smallbox quiz" style="">
-                Réponds ici à la question !
+        <div id="container">
+        <iframe id="WinaMaxConnectionIframe"
+              title="WinaMaxConnectionIframe"
+              scrolling = "no"
+              src="https://www.winamax.fr/account/login.php">
+        </iframe>
+      </div>
+        <a class="smallbox quiz" style="" id="smallboxBottom">
+                Vous devez être connecté pour cette fonctionnalité !
         </a>
         <script src="../js/storage.js"></script>
     </body>

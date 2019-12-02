@@ -13,16 +13,22 @@ const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
 const sublive = document.querySelector("#sub-live")
 const sublive2 = document.querySelector("#sub-live2")
+const smallboxBottom = document.querySelector("#smallboxBottom");
+const divlive = document.querySelector("#divLive");
+const divbuttons = document.querySelector("#divButtons");
+const divIframe = document.querySelector("#container");
 
 var msecPerMinute = 1000 * 60;
 var msecPerHour = msecPerMinute * 60;
+var connected = false;
 
 function handleFreeroll(e)
 {
   console.log("--HANDLE FREEROLL--");
+  var newHeight = html.offsetHeight;
   if(e)
   {
-    html.style.height = "360px";
+    newHeight = newHeight+80;
     divFreeroll.style.display = "flex";
     chrome.storage.sync.get(["planningFreeroll"],function(res)
     {
@@ -63,8 +69,45 @@ function handleFreeroll(e)
       }
     });
   }else {
-    html.style.height = "280px";
+    newHeight = newHeight-80;
     divFreeroll.style.display = 'none';
+  }
+  html.style.height = newHeight+'px';
+}
+
+function checkConnection(){
+  console.log("--CHECK Connection--");
+  fetch("https://www.winamax.fr/mon-compte_informations-personnelles").then(function(response) {
+    response.text().then(function(text) {
+      console.log(text);
+      let title = "Mon compte";
+      if(text.includes(title))
+      {
+        console.log("OFF");
+        connected = false;
+      }
+      else {
+        connected = true;
+      }
+    });
+  });
+}
+
+function handleConnectionTicket(e)
+{
+  checkConnection();
+  if(!connected)
+  {
+    smallboxBottom.style.display = 'none';
+    divlive.style.display = 'none';
+    divbuttons.style.display = 'none';
+    divIframe.style.display = 'flex';
+  }
+  else {
+    smallboxBottom.style.display = 'flex';
+    divlive.style.display = 'flex';
+    divbuttons.style.display = 'flex';
+    divIframe.style.display = 'none';
   }
 }
 
@@ -150,10 +193,11 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
 
   //--------------------------------------Update HTML Informations-------------------------------------------------
 
-  //handlePlanning();
   handleLive(res.slive, res.nextLive, res.nextLiveTitle, res.nextLivePresenter);
 
   handleFreeroll(res.freeroll);
+
+  handleConnectionTicket();
 
   //-----------------------------Bouton checké selon les settings saved---------------------------------
 

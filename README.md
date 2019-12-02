@@ -16,7 +16,7 @@ Functionalities:
 
 [X] Freeroll on Interface
 
-[ ] CheckLive & update HTML
+[X] CheckLive & update HTML
 
 [ ] CheckQuiz & collect Question
 
@@ -29,3 +29,4 @@ Functionalities:
 ------------------------------
 List of changements:
 -----------------------
+Main Loop Done

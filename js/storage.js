@@ -12,6 +12,7 @@ const textFreeroll = document.querySelector("#textFreeroll");
 const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
 const sublive = document.querySelector("#sub-live")
+const sublive2 = document.querySelector("#sub-live2")
 
 var msecPerMinute = 1000 * 60;
 var msecPerHour = msecPerMinute * 60;
@@ -67,7 +68,7 @@ function handleFreeroll(e)
   }
 }
 
-function handleLive(e)
+function handleLive(e, Livetime, title, presenter)
 {
   console.log("--HANDLE LIVE--");
   //chopper le planning pour avoir le live courrant ou le prochain
@@ -79,12 +80,35 @@ function handleLive(e)
   }
   else { //OFF
     cyacolor.style.background = 'linear-gradient(to right, #ffffff 0%, #C56B6B 0%, #B45055 50%, #a3353e 100%);';
-    boxTitle.innerText = 'Prochain live dans XX:XX';
-    sublive.innerText = 'Live OFF';
+    if(Livetime != -1)
+    {
+      let live = new Date(Livetime);
+      let current = new Date;
+      let interval = live-current;
+      let hours = Math.floor(interval / msecPerHour);
+      interval = interval - (hours*msecPerHour);
+      let minutes = Math.floor(interval / msecPerMinute);
+      sublive.innerText = 'Titre : '+title;
+      if(hours == 0)
+      {
+          boxTitle.innerText = "Prochain Live : "+minutes+" minutes ("+live.getHours()+":"+live.getMinutes()+")";
+      }
+      else
+      {
+          boxTitle.innerText = "Prochain Live : "+hours+"h"+minutes+" ("+live.getHours()+":"+live.getMinutes()+")";
+      }
+      sublive.innerText = 'Titre : '+title;
+      sublive2.innerText = 'Presenté par : '+presenter;
+    }
+    else {
+      boxTitle.innerText = 'Prochain live Bientôt';
+      sublive.innerText = 'Live OFF';
+      sublive2.innerText = 'Presenté par : quelqu\'un';
+    }
   }
 }
 
-chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive'],function(res)
+chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive', 'nextLiveTitle', 'nextLivePresenter'],function(res)
 {
   //--------------------------------INIT------------------------------------------------
   if(!res.hasOwnProperty('notif')) //initialisation à True du Setting de notification
@@ -106,13 +130,28 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive'],function(r
   if(!res.hasOwnProperty('slive')) //initialisation à True du Setting de tickets
   {
        res.slive = false;
-       chrome.storage.sync.set({slive : live});
+       chrome.storage.sync.set({slive : false});
+  }
+  if(!res.hasOwnProperty('nextLive')) //initialisation à True du Setting de tickets
+  {
+       res.nextLive = -1;
+       chrome.storage.sync.set({nextLive : -1});
+  }
+  if(!res.hasOwnProperty('nextLiveTitle')) //initialisation à True du Setting de tickets
+  {
+       res.nextLive = "Pas d'infos";
+       chrome.storage.sync.set({nextLive : "Pas d'infos"});
+  }
+  if(!res.hasOwnProperty('nextLiveTitle')) //initialisation à True du Setting de tickets
+  {
+       res.nextLivePresenter = "Pas d'infos";
+       chrome.storage.sync.set({nextLivePresenter : "Pas d'infos"});
   }
 
   //--------------------------------------Update HTML Informations-------------------------------------------------
 
   //handlePlanning();
-  handleLive(res.slive);
+  handleLive(res.slive, res.nextLive, res.nextLiveTitle, res.nextLivePresenter);
 
   handleFreeroll(res.freeroll);
 

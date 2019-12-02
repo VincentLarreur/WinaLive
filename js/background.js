@@ -1,6 +1,5 @@
 var live = false; //live OFF
 var quiz = false; // aucun quiz n'est pour l'instant actif
-var timer = 120000;
 
 function fetchWeekPlanning()
 {
@@ -29,6 +28,7 @@ function updateHTML()
 
 function getNextLive()
 {
+  var timernext = 120000;
   var d = new Date();
   var n = d.getDay();
   chrome.storage.sync.get(['planning'],function(res)
@@ -37,59 +37,66 @@ function getNextLive()
     {
         fetchWeekPlanning();
     }
-    else {
-      var today;
-      var tomorrow;
-      switch(n) {
-      case 1:
-        today=res.planning.M;
-        tomorrow=res.planning.T;
-        break;
-      case 2:
-        today=res.planning.T;
-        tomorrow=res.planning.W;
-        break;
-      case 3:
-        today=res.planning.W;
-        tomorrow=res.planning.Th;
-        break;
-      case 4:
-        today=res.planning.Th;
-        tomorrow=res.planning.F;
-        break;
-      case 5:
-        today=res.planning.F;
-        tomorrow=res.planning.S;
-        break;
-      case 6:
-        today=res.planning.S;
-        tomorrow=res.planning.Su;
-        break;
-      case 7:
-        today=res.planning.Su;
-        tomorrow=res.planning.M;
-        break;
-      default:
-        timer = 120000;
-      }
-      var tmp;
-      var liveLaterToday = false;
-      for (element of today) {
-        tmp = new Date(element.start_date);
-        if(d<tmp)
-        {
-          liveLaterToday = true;
-          chrome.storage.sync.set({nextLive : element});
-          timer = tmp-d;
-          break;
-        }
-      }
-      if(!liveLaterToday)
+  });
+  chrome.storage.sync.get(['planning'],function(res)
+  {
+    var today;
+    var tomorrow;
+    switch(n) {
+    case 1:
+      today=res.planning.M;
+      tomorrow=res.planning.T;
+      break;
+    case 2:
+      today=res.planning.T;
+      tomorrow=res.planning.W;
+      break;
+    case 3:
+      today=res.planning.W;
+      tomorrow=res.planning.Th;
+      break;
+    case 4:
+      today=res.planning.Th;
+      tomorrow=res.planning.F;
+      break;
+    case 5:
+      today=res.planning.F;
+      tomorrow=res.planning.S;
+      break;
+    case 6:
+      today=res.planning.S;
+      tomorrow=res.planning.Su;
+      break;
+    case 7:
+      today=res.planning.Su;
+      tomorrow=res.planning.M;
+      break;
+    default:
+      timernext = 120000;
+    }
+    var tmp;
+    var liveLaterToday = false;
+    for (element of today) {
+      tmp = new Date(element.start_date);
+      if(d<tmp)
       {
-        chrome.storage.sync.set({nextLive : tomorrow[0].start_date});
-        timer = tomorrow[0].start_date-d;
+        liveLaterToday = true;
+        chrome.storage.sync.set({nextLive : element.start_date});
+        chrome.storage.sync.set({nextLiveTitle : element.title});
+        chrome.storage.sync.set({nextLivePresenter : element.presenters[0]});
+        timernext = tmp-d;
+        break;
       }
     }
+    if(!liveLaterToday)
+    {
+      chrome.storage.sync.set({nextLive : tomorrow[0].start_date});
+      chrome.storage.sync.set({nextLiveTitle : tomorrow[0].title});
+      chrome.storage.sync.set({nextLivePresenter : tomorrow[0].presenters[0]});
+      timernext = tomorrow[0].start_date-d;
+    }
+    console.log("Next check for live in : "+timernext+"ms");
+    setTimeout(function(){main()}, timernext);
   });
 }
 
@@ -102,7 +109,6 @@ function checkLive()
       let title = "La grille des programmes - Winamax";
       if(text.includes(title)) // OFF
       {
-        console.log("OFF");
         if(live)
         {
           live = false;
@@ -114,7 +120,6 @@ function checkLive()
           live = true;
           //notification
         }
-        timer = 120000
       }
       updateHTML();
     });
@@ -124,28 +129,23 @@ function checkLive()
 function checkQuiz() // function to check if there is a quizz of not
 {
   console.log("-CHECK QUIZ--");
-
 }
 
 function main()
 {
   console.log("--MAIN--");
-  if(!live)
+  checkLive(); // pour mettre a jour la variable live
+  if(!live) //OFF
   {
+    console.log("LIVE OFF");
     getNextLive();
-    console.log("--TIMED OUT FOR "+timer+"ms--\n");
-    setTimeout(checkLive(), 2000);//on attends justqu'au timer
   }
-  else
+  else //ON
   {
-    if(quiz)
-    {
-      checkQuiz();
-    }
-    else
-    {
-      console.log("QUIZ");
-    }
+    console.log("LIVE ON")
+    checkQuiz();
+    console.log("Next Checks in 2 mins");
+    setTimeout(function(){main()}, 120000);
   }
 }
 
@@ -171,8 +171,7 @@ function init()
       fetchWeekPlanning();
     }
   });
-  console.log("--PAUSE FOR "+timer+"ms--\n");
-  setInterval(main(), 2000);
 }
 
 init();
+main();

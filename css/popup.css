@@ -112,8 +112,18 @@ a
     text-overflow: ellipsis;
 }
 
+.box-sub1
+{
+    color: grey;
+    font-size: 11px;
+    padding: 10px 20px 0 20px;
+    overflow:hidden !important;
+    text-overflow: ellipsis;
+    display: block;
+    align-items: baseline;
+}
 
-.box-msg
+.box-sub2
 {
     color: grey;
     font-size: 11px;

@@ -20,6 +20,10 @@ a
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#a3353e', GradientType=1 );
 }
 
+#divFreeroll
+{
+  display: none;
+}
 
 .left
 {

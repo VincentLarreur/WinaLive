@@ -25,10 +25,8 @@ var connected = false;
 function handleFreeroll(e)
 {
   console.log("--HANDLE FREEROLL--");
-  var newHeight = html.offsetHeight;
   if(e)
   {
-    newHeight = newHeight+80;
     divFreeroll.style.display = "flex";
     chrome.storage.sync.get(["planningFreeroll"],function(res)
     {
@@ -69,10 +67,8 @@ function handleFreeroll(e)
       }
     });
   }else {
-    newHeight = newHeight-80;
     divFreeroll.style.display = 'none';
   }
-  html.style.height = newHeight+'px';
 }
 
 function checkConnection(){ // real check : ici toujours non connecté
@@ -94,22 +90,24 @@ function checkConnection(){ // real check : ici toujours non connecté
 
 function handleConnection(quiz, tickets)
 {
-  //checkConnection();
+  if(quiz || tickets)
+  checkConnection();
   if(!connected)
   {
-    console.log(quiz || tickets);
     if(quiz || tickets)
     {
+      console.log("on enleve");
       smallboxBottom.style.display = 'none';
       divlive.style.display = 'none';
       divFreeroll.style.display = 'none';
       divForm.style.display = 'block';
     }
     else {
+      console.log("on remet");
       divForm.style.display = 'none';
-      smallboxBottom.style.display = 'flex';
-      divlive.style.display = 'flex';
-      divFreeroll.style.display = 'flex';
+      smallboxBottom.style.display = 'none';
+      divlive.style.display = 'auto';
+      divFreeroll.style.display = 'auto';
     }
   }
 }
@@ -117,7 +115,6 @@ function handleConnection(quiz, tickets)
 function handleLive(e, Livetime, title, presenter)
 {
   console.log("--HANDLE LIVE--");
-  //chopper le planning pour avoir le live courrant ou le prochain
   if(e) //ON
   {
     cyacolor.style.background = 'linear-gradient(to right, #ffffff 0%, #CDDF8F 0%, #9CCF70 50%, #6BBF51 100%';

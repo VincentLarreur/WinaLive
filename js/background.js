@@ -20,9 +20,13 @@ function updateHTML()
   if(live) //ON
   {
     chrome.browserAction.setIcon({path: "images/WinaLiveOn32x32.png"});
+    chrome.browserAction.setBadgeText({text:"ON"});
+    chrome.browserAction.setBadgeBackgroundColor({color:"green"});
   }
   else { //OFF
     chrome.browserAction.setIcon({path: "images/WinaLiveOff32x32.png"});
+    chrome.browserAction.setBadgeText({text:"OFF"});
+    chrome.browserAction.setBadgeBackgroundColor({color:"red"});
   }
 }
 

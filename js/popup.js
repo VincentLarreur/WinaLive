@@ -6,6 +6,10 @@ const quizStatus = document.querySelector('#quiz');
 const freerollStatus = document.querySelector('#freeroll');
 const ticketStatus = document.querySelector('#tickets');
 
+const smallboxBottom = document.querySelector("#smallboxBottom");
+const divlive = document.querySelector("#divLive");
+const divbuttons = document.querySelector("#divButtons");
+const divForm = document.querySelector("#divForm");
 const divFreeroll = document.querySelector("#divFreeroll");
 const textFreeroll = document.querySelector("#textFreeroll");
 
@@ -13,10 +17,6 @@ const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
 const sublive = document.querySelector("#sub-live")
 const sublive2 = document.querySelector("#sub-live2")
-const smallboxBottom = document.querySelector("#smallboxBottom");
-const divlive = document.querySelector("#divLive");
-const divbuttons = document.querySelector("#divButtons");
-const divIframe = document.querySelector("#container");
 
 var msecPerMinute = 1000 * 60;
 var msecPerHour = msecPerMinute * 60;
@@ -75,12 +75,11 @@ function handleFreeroll(e)
   html.style.height = newHeight+'px';
 }
 
-function checkConnection(){
+function checkConnection(){ // real check : ici toujours non connecté
   console.log("--CHECK Connection--");
-  fetch("https://www.winamax.fr/mon-compte_informations-personnelles").then(function(response) {
+  fetch("https://www.winamax.fr/account/login.php").then(function(response) {
     response.text().then(function(text) {
-      console.log(text);
-      let title = "Mon compte";
+      let title = "Pas encore de compte ? Inscrivez-vous gratuitement";
       if(text.includes(title))
       {
         console.log("OFF");
@@ -93,21 +92,25 @@ function checkConnection(){
   });
 }
 
-function handleConnectionTicket(e)
+function handleConnection(quiz, tickets)
 {
-  checkConnection();
+  //checkConnection();
   if(!connected)
   {
-    smallboxBottom.style.display = 'none';
-    divlive.style.display = 'none';
-    divbuttons.style.display = 'none';
-    divIframe.style.display = 'flex';
-  }
-  else {
-    smallboxBottom.style.display = 'flex';
-    divlive.style.display = 'flex';
-    divbuttons.style.display = 'flex';
-    divIframe.style.display = 'none';
+    console.log(quiz || tickets);
+    if(quiz || tickets)
+    {
+      smallboxBottom.style.display = 'none';
+      divlive.style.display = 'none';
+      divFreeroll.style.display = 'none';
+      divForm.style.display = 'block';
+    }
+    else {
+      divForm.style.display = 'none';
+      smallboxBottom.style.display = 'flex';
+      divlive.style.display = 'flex';
+      divFreeroll.style.display = 'flex';
+    }
   }
 }
 
@@ -197,7 +200,7 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
 
   handleFreeroll(res.freeroll);
 
-  handleConnectionTicket();
+  handleConnection(res.quiz, res.tickets);
 
   //-----------------------------Bouton checké selon les settings saved---------------------------------
 
@@ -215,6 +218,8 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
    quizStatus.addEventListener('click',function(e)
    {
        chrome.storage.sync.set({quiz : e.target.checked});
+       res.quiz = e.target.checked;
+       handleConnection(res.quiz, res.tickets);
    });
    freerollStatus.addEventListener('click',function(e)
    {
@@ -224,5 +229,7 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
    ticketStatus.addEventListener('click',function(e)
    {
        chrome.storage.sync.set({tickets : e.target.checked});
+       res.tickets = e.target.checked;
+       handleConnection(res.quiz, res.tickets);
    });
 });

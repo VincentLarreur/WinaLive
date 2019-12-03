@@ -63,16 +63,26 @@
                 <label data-tg-off="OFF" data-tg-on="ON" for="tickets" class="tgl-btn"></label>
             </div>
         </div>
-        <div id="container">
-        <iframe id="WinaMaxConnectionIframe"
-              title="WinaMaxConnectionIframe"
-              scrolling = "no"
-              src="https://www.winamax.fr/account/login.php">
-        </iframe>
+       <div class="box form-css" id="divForm" style="width:400px; height:260px">
+        <h1>Connectez-vous pour ces fonctionnalité</h1>
+        <form id="login-form-standalone" method="post" action="https://www.winamax.fr/account/login.php" autocomplete="off">
+                    <p class="field">
+                        <input type="email" name="email" id="loginbox_email" placeholder="Votre e-mail" tabindex="1" autocomplete="off" value="">
+                    </p>
+                    <p class="field">
+                        <input type="password" id="loginbox_password" name="password" placeholder="Votre MDP" tabindex="2" autocomplete="off">
+                    </p>
+                    <p class="field birthdate">
+                        <input type="text" id="loginbox_birthday" name="birth_day" autocomplete="off" placeholder="JJ" tabindex="3" pattern="[0-9]*" size="2" maxlength="2" value="">
+                        <input type="text" id="loginbox_birthmonth" name="birth_month" autocomplete="off" placeholder="MM" tabindex="4" pattern="[0-9]*" size="2" maxlength="2" value="">
+                        <input type="text" id="loginbox_birthyear" name="birth_year" autocomplete="off" placeholder="AAAA" tabindex="5" pattern="[0-9]*" size="4" maxlength="4" value="">
+                    </p>
+                    <button type="submit" id="login-button" name="submitlogin" class="secondary-button" tabindex="6"><i class="icon-lock"></i>Connexion</button>
+        </form>
       </div>
         <a class="smallbox quiz" style="" id="smallboxBottom">
                 Vous devez être connecté pour cette fonctionnalité !
         </a>
-        <script src="../js/storage.js"></script>
+        <script src="../js/popup.js"></script>
     </body>
 </html>

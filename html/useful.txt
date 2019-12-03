@@ -1,0 +1,18 @@
+<form id="login-form-standalone" method="post" action="/account/login.php" autocomplete="off">
+            <p class="field">
+                <label>Adresse email</label>
+                <input type="email" name="email" id="loginbox_email" placeholder="vous@exemple.com" tabindex="1" autocomplete="off" value="">
+            </p>
+            <p class="field">
+                <label>Mot de passe</label>
+                <input type="password" id="loginbox_password" name="password" placeholder="" tabindex="2" autocomplete="off">
+                <a class="forgot-password" href="/account/lost_password.php">Mot de passe oublié ?</a>
+            </p>
+            <p class="field birthdate">
+                <label for="day-input">Date de naissance</label>
+                <input type="text" id="loginbox_birthday" name="birth_day" autocomplete="off" placeholder="JJ" tabindex="3" pattern="[0-9]*" size="2" maxlength="2" value="">
+                <input type="text" id="loginbox_birthmonth" name="birth_month" autocomplete="off" placeholder="MM" tabindex="4" pattern="[0-9]*" size="2" maxlength="2" value="">
+                <input type="text" id="loginbox_birthyear" name="birth_year" autocomplete="off" placeholder="AAAA" tabindex="5" pattern="[0-9]*" size="4" maxlength="4" value="">
+            </p>
+            <button type="submit" id="login-button" name="submitlogin" class="secondary-button" tabindex="6"><i class="icon-lock"></i>Connexion</button>
+</form>

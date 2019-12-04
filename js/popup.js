@@ -5,13 +5,17 @@ const notifStatus = document.querySelector('#notif');
 const quizStatus = document.querySelector('#quiz');
 const freerollStatus = document.querySelector('#freeroll');
 const ticketStatus = document.querySelector('#tickets');
+const loginButton = document.querySelector("#login-button")
 
 const smallboxBottom = document.querySelector("#smallboxBottom");
 const divlive = document.querySelector("#divLive");
 const divbuttons = document.querySelector("#divButtons");
 const divForm = document.querySelector("#divForm");
 const divFreeroll = document.querySelector("#divFreeroll");
+const waitingCircle = document.querySelector("#waitingCircle");
 const textFreeroll = document.querySelector("#textFreeroll");
+const divBoutonsTicket = document.querySelector("#divBoutontickets");
+const boutonsTicket = document.querySelector("#get_tickets");
 
 const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
@@ -73,45 +77,89 @@ function handleFreeroll(e)
 
 function checkConnection(){ // real check : ici toujours non connecté
   console.log("--CHECK Connection--");
-  fetch("https://www.winamax.fr/account/login.php").then(function(response) {
-    response.text().then(function(text) {
-      let title = "Pas encore de compte ? Inscrivez-vous gratuitement";
-      if(text.includes(title))
-      {
-        console.log("OFF");
-        connected = false;
-      }
-      else {
-        connected = true;
-      }
+  try{
+    fetch("https://www.winamax.fr/account/login.php").then(function(response) {
+      response.text().then(function(text) {
+        let title = "Pas encore de compte ? Inscrivez-vous gratuitement";
+        if(text.includes(title))
+        {
+          connected = false;
+        }
+        else {
+          connected = true;
+        }
+      });
     });
-  });
+    smallboxBottom.style.display='none';
+  }
+  catch(error)
+  {
+    console.log(error);
+    connected = false;
+    smallboxBottom.style.display='flex  ';
+  }
 }
 
 function handleConnection(quiz, tickets, freeroll)
 {
+  console.log("--Handle Connection--");
   checkConnection();
-  if(!connected)
-  {
-    if(quiz || tickets)
+  setTimeout(function(){
+    console.log(connected);
+    if(!connected)
     {
-      divFreeroll.style.display = 'none';
-      smallboxBottom.style.display = 'none';
-      divlive.style.display = 'none';
-      divForm.style.display = 'block';
-      freerollStatus.disabled = true;
+      if(quiz || tickets)
+      {
+        divFreeroll.style.display = 'none';
+        divlive.style.display = 'none';
+        divForm.style.display = 'block';
+        freerollStatus.disabled = true;
+      }
+      else {
+        if(freeroll)
+        {
+          divFreeroll.style.display = 'flex';
+        }
+        divForm.style.display = 'none';
+        divlive.style.display = 'flex';
+        freerollStatus.disabled = false;
+      }
     }
     else {
+      freerollStatus.disabled = false;
+      if(tickets)
+      {
+        divBoutonsTicket.style.display = "flex";
+      }
+      else {
+        divBoutonsTicket.style.display = "none";
+      }
+    }
+  }, 1000);
+}
+
+function handleTryConnection()
+{
+  console.log("--Waiting Connection--");
+  divForm.style.display = 'none';
+  waitingCircle.style.display = 'flex';
+  setTimeout(function(){
+    checkConnection()
+  }, 2500);
+  setTimeout(function(){
+    waitingCircle.style.display = 'none';
+    if(connected)
+    {
       if(freeroll)
       {
         divFreeroll.style.display = 'flex';
       }
-      divForm.style.display = 'none';
-      smallboxBottom.style.display = 'none';
       divlive.style.display = 'flex';
-      freerollStatus.disabled = false;
     }
-  }
+    else {
+      divForm.style.display = 'block';
+    }
+  }, 10000);
 }
 
 function handleLive(e, Livetime, title, presenter)
@@ -231,5 +279,13 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
        chrome.storage.sync.set({tickets : e.target.checked});
        res.tickets = e.target.checked;
        handleConnection(res.quiz, res.tickets, res.freeroll);
+   });
+   loginButton.addEventListener('click',function(e)
+   {
+     handleTryConnection();
+   });
+   boutonsTicket.addEventListener('click',function(e)
+   {
+     divBoutonsTicket.style.display = 'none';
    });
 });

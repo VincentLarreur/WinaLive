@@ -53,11 +53,11 @@ function handleFreeroll(e)
       interval = interval - (hours*msecPerHour);
       let minutes = Math.floor(interval / msecPerMinute);
       let nextFreeroll = res.planningFreeroll[j];
-      if(hours == 0)
+      if(hours == 0 && minutes != 0)
       {
           textFreeroll.innerText = "Prochain Freeroll : "+minutes+" minutes ("+nextFreeroll.getHours()+":"+nextFreeroll.getMinutes()+")";
       }
-      else if(minutes ==0)
+      else if(minutes == 0)
       {
         textFreeroll.innerText = "Le FreeRoll, c'est maintenant !";
       }
@@ -88,26 +88,28 @@ function checkConnection(){ // real check : ici toujours non connecté
   });
 }
 
-function handleConnection(quiz, tickets)
+function handleConnection(quiz, tickets, freeroll)
 {
-  if(quiz || tickets)
   checkConnection();
   if(!connected)
   {
     if(quiz || tickets)
     {
-      console.log("on enleve");
+      divFreeroll.style.display = 'none';
       smallboxBottom.style.display = 'none';
       divlive.style.display = 'none';
-      divFreeroll.style.display = 'none';
       divForm.style.display = 'block';
+      freerollStatus.disabled = true;
     }
     else {
-      console.log("on remet");
+      if(freeroll)
+      {
+        divFreeroll.style.display = 'flex';
+      }
       divForm.style.display = 'none';
       smallboxBottom.style.display = 'none';
-      divlive.style.display = 'auto';
-      divFreeroll.style.display = 'auto';
+      divlive.style.display = 'flex';
+      freerollStatus.disabled = false;
     }
   }
 }
@@ -197,7 +199,7 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
 
   handleFreeroll(res.freeroll);
 
-  handleConnection(res.quiz, res.tickets);
+  handleConnection(res.quiz, res.tickets, res.freeroll);
 
   //-----------------------------Bouton checké selon les settings saved---------------------------------
 
@@ -216,17 +218,18 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
    {
        chrome.storage.sync.set({quiz : e.target.checked});
        res.quiz = e.target.checked;
-       handleConnection(res.quiz, res.tickets);
+       handleConnection(res.quiz, res.tickets, res.freeroll);
    });
    freerollStatus.addEventListener('click',function(e)
    {
       chrome.storage.sync.set({freeroll : e.target.checked});
       handleFreeroll(e.target.checked);
+      res.freeroll = e.target.checked;
    });
    ticketStatus.addEventListener('click',function(e)
    {
        chrome.storage.sync.set({tickets : e.target.checked});
        res.tickets = e.target.checked;
-       handleConnection(res.quiz, res.tickets);
+       handleConnection(res.quiz, res.tickets, res.freeroll);
    });
 });

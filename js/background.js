@@ -146,7 +146,7 @@ function main()
   }
   else //ON
   {
-    console.log("LIVE ON")
+    console.log("LIVE ON");
     checkQuiz();
     console.log("Next Checks in 2 mins");
     setTimeout(function(){main()}, 120000);
@@ -173,6 +173,7 @@ function init()
     if(!res.hasOwnProperty('planning') || res.weekNb != currentWeekNB)
     {
       fetchWeekPlanning();
+      chrome.storage.sync.set({weekNb : currentWeekNB});
     }
   });
 }

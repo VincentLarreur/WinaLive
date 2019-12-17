@@ -77,8 +77,8 @@ function handleFreeroll(e)
 
 function checkConnection(){ // real check : ici toujours non connecté
   console.log("--CHECK Connection--");
-  try{
-    fetch("https://www.winamax.fr/account/login.php").then(function(response) {
+    fetch("https://www.winamax.fr/account/login.php")
+    .then(function(response) {
       response.text().then(function(text) {
         let title = "Pas encore de compte ? Inscrivez-vous gratuitement";
         if(text.includes(title))
@@ -89,15 +89,14 @@ function checkConnection(){ // real check : ici toujours non connecté
           connected = true;
         }
       });
-    });
-    smallboxBottom.style.display='none';
-  }
-  catch(error)
-  {
-    console.log(error);
+    })
+    .catch((error) => {
+    console.log("Fetch login :"+error);
     connected = false;
     smallboxBottom.style.display='flex  ';
-  }
+    });
+
+    smallboxBottom.style.display='none';
 }
 
 function handleConnection(quiz, tickets, freeroll)
@@ -108,6 +107,7 @@ function handleConnection(quiz, tickets, freeroll)
     console.log(connected);
     if(!connected)
     {
+      divBoutonsTicket.style.display = "none";
       if(quiz || tickets)
       {
         divFreeroll.style.display = 'none';
@@ -129,7 +129,11 @@ function handleConnection(quiz, tickets, freeroll)
       freerollStatus.disabled = false;
       if(tickets)
       {
-        divBoutonsTicket.style.display = "flex";
+        var formData = new FormData();
+        formData.append("get_tickets", "Recevoir mes tickets");
+        var request = new XMLHttpRequest();
+        request.open("POST", "https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll");
+        request.send(formData);
       }
       else {
         divBoutonsTicket.style.display = "none";
@@ -168,8 +172,9 @@ function handleLive(e, Livetime, title, presenter)
   if(e) //ON
   {
     cyacolor.style.background = 'linear-gradient(to right, #ffffff 0%, #CDDF8F 0%, #9CCF70 50%, #6BBF51 100%';
-    boxTitle.innerText = 'Titre du Live Winamax';
-    sublive.innerText = 'Live ON';
+    boxTitle.innerText = 'Titre : '+title;
+    sublive.innerText = 'LIVE ON';
+    sublive2.innerText = 'Présenté par : '+presenter;
   }
   else { //OFF
     cyacolor.style.background = 'linear-gradient(to right, #ffffff 0%, #C56B6B 0%, #B45055 50%, #a3353e 100%);';

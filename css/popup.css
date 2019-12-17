@@ -28,7 +28,10 @@ a
 {
   display:none;
 }
-
+#divBoutontickets
+{
+  display: none;
+}
 .left
 {
     margin: 10px auto 0 15px;

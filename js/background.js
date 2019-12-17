@@ -4,19 +4,17 @@ var quiz = false; // aucun quiz n'est pour l'instant actif
 function fetchWeekPlanning()
 {
   console.log("--Fetching Planning--");
-  try{
-    fetch("https://www.winamax.fr/winamax-tv-grille").then(function(response) {
+    fetch("https://www.winamax.fr/winamax-tv-grille")
+    .then(function(response) {
       response.text().then(function(text) {
         let JSONString = text.substring(text.indexOf("days")+6, text.indexOf("\"highlight\"")-1);
         var obj = JSON.parse(JSONString);
         chrome.storage.sync.set({planning : obj});
       });
+    })
+    .catch((error) => {
+    console.log("Fetch Planning :"+error)
     });
-  }
-  catch(error)
-  {
-    console.log(error);
-  }
 }
 
 function updateHTML()
@@ -85,18 +83,36 @@ function getNextLive()
       timernext = 120000;
     }
     var tmp;
+    var old;
     var liveLaterToday = false;
     for (element of today) {
       tmp = new Date(element.start_date);
       if(d<tmp)
       {
-        liveLaterToday = true;
-        chrome.storage.sync.set({nextLive : element.start_date});
-        chrome.storage.sync.set({nextLiveTitle : element.title});
-        chrome.storage.sync.set({nextLivePresenter : element.presenters[0]});
-        timernext = tmp-d;
-        break;
+        if(old != undefined)
+        {
+            let oldstart = new Date(old.start_date);
+            let oldfinish = new Date(old.end_date);
+            if(oldstart <= d && d <= oldfinish)
+            {
+              chrome.storage.sync.set({nextLive : old.start_date});
+              chrome.storage.sync.set({nextLiveTitle : old.title});
+              chrome.storage.sync.set({nextLivePresenter : old.presenters[0]});
+              liveLaterToday = true;
+              timernext = 120000;
+              break;
+            }
+            else {
+              chrome.storage.sync.set({nextLive : element.start_date});
+              chrome.storage.sync.set({nextLiveTitle : element.title});
+              chrome.storage.sync.set({nextLivePresenter : element.presenters[0]});
+              liveLaterToday = true;
+              timernext = tmp-d;
+              break;
+            }
+        }
       }
+      old = element;
     }
     if(!liveLaterToday)
     {
@@ -114,8 +130,8 @@ function getNextLive()
 function checkLive()
 {
   console.log("--CHECK LIVE--");
-  try {
-    fetch("https://www.winamax.fr/winamax-tv").then(function(response) {
+    fetch("https://www.winamax.fr/winamax-tv")
+    .then(function(response) {
       response.text().then(function(text) {
         let title = "La grille des programmes - Winamax";
         if(text.includes(title)) // OFF
@@ -134,12 +150,10 @@ function checkLive()
         }
         updateHTML();
       });
+    })
+    .catch((error) => {
+    console.log("Fetch Live : "+error)
     });
-  }
-  catch(error)
-  {
-    console.log(error);
-  }
 }
 
 function checkQuiz() // function to check if there is a quizz of not

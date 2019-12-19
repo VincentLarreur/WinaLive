@@ -6,7 +6,6 @@ const quizStatus = document.querySelector('#quiz');
 const freerollStatus = document.querySelector('#freeroll');
 const ticketStatus = document.querySelector('#tickets');
 const loginButton = document.querySelector("#login-button")
-
 const smallboxBottom = document.querySelector("#smallboxBottom");
 const divlive = document.querySelector("#divLive");
 const divbuttons = document.querySelector("#divButtons");
@@ -16,7 +15,7 @@ const waitingCircle = document.querySelector("#waitingCircle");
 const textFreeroll = document.querySelector("#textFreeroll");
 const divBoutonsTicket = document.querySelector("#divBoutontickets");
 const boutonsTicket = document.querySelector("#get_tickets");
-
+const container = document.querySelector("#container");
 const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
 const sublive = document.querySelector("#sub-live")
@@ -104,7 +103,7 @@ function handleConnection(quiz, tickets, freeroll)
   console.log("--Handle Connection--");
   checkConnection();
   setTimeout(function(){
-    console.log(connected);
+    console.log("Connected : "+connected);
     if(!connected)
     {
       divBoutonsTicket.style.display = "none";
@@ -129,26 +128,59 @@ function handleConnection(quiz, tickets, freeroll)
       freerollStatus.disabled = false;
       if(tickets)
       {
-        var formData = new FormData();
-        formData.append("get_tickets", "Recevoir mes tickets");
-        var request = new XMLHttpRequest();
-        request.open("POST", "https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll");
-        request.send(formData);
-      }
-      else {
-        divBoutonsTicket.style.display = "none";
+        console.log(tickets)
+        chrome.storage.sync.get(['weekNb', 'dayNb'],function(res)
+        {
+          let now = new Date();
+          let onejan = new Date(now.getFullYear(), 0, 1);
+          currentWeekNB = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
+          currentDayNB = now.getDay();
+          if(!res.hasOwnProperty('weekNb'))
+          {
+            chrome.storage.sync.set({weekNb : currentWeekNB});
+            res.weekNb = currentWeekNB;
+          }
+          if(!res.hasOwnProperty('dayNb'))
+          {
+            chrome.storage.sync.set({dayNb : currentDayNB});
+            res.dayNb = currentDayNB;
+          }
+          if(res.weekNb != currentWeekNB || res.dayNb != currentDayNB)
+          {
+            container.style.display = 'block';
+            // var formData = new FormData(); --> a tester
+            // formData.append("get_tickets", "Recevoir mes tickets");
+            // var request = new XMLHttpRequest();
+            // request.open("POST", "https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll");
+            // request.send(formData);
+            var ifrm = document.createElement('iframe');
+            ifrm.setAttribute('id', 'ifrm'); // assign an id
+            container.appendChild(ifrm);
+            ifrm.setAttribute('src', 'https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll');
+            ifrm.setAttribute('scrolling', 'no');
+            ifrm.setAttribute('style', 'border: 0px none; height: 800px; margin-top: -550px; width: 400px;');
+          }
+          else {
+          {
+            container.style.display = 'none';
+            while (container.firstChild) {
+              container.removeChild(container.firstChild);
+            }
+          }
+          }
+        });
       }
     }
   }, 1000);
 }
 
-function handleTryConnection()
+function handleTryConnection(q, t, f)
 {
   console.log("--Waiting Connection--");
   divForm.style.display = 'none';
   waitingCircle.style.display = 'flex';
   setTimeout(function(){
-    checkConnection()
+    handleConnection(q, t, f);
   }, 2500);
   setTimeout(function(){
     waitingCircle.style.display = 'none';
@@ -240,7 +272,7 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
        res.nextLive = "Pas d'infos";
        chrome.storage.sync.set({nextLive : "Pas d'infos"});
   }
-  if(!res.hasOwnProperty('nextLiveTitle')) //initialisation à True du Setting de tickets
+  if(!res.hasOwnProperty('nextLivePresenter')) //initialisation à True du Setting de tickets
   {
        res.nextLivePresenter = "Pas d'infos";
        chrome.storage.sync.set({nextLivePresenter : "Pas d'infos"});
@@ -287,7 +319,7 @@ chrome.storage.sync.get(['notif','quiz','freeroll','tickets','slive', 'nextLive'
    });
    loginButton.addEventListener('click',function(e)
    {
-     handleTryConnection();
+     handleTryConnection(res.quiz, res.tickets, res.freeroll);
    });
    boutonsTicket.addEventListener('click',function(e)
    {

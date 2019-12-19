@@ -5,6 +5,7 @@
     "author": "Vincent Larreur",
     "permissions":
     [
+      "notifications",
       "storage",
       "http://winamax.fr/"
     ],
@@ -24,6 +25,9 @@
       "48": "images/WinaLive48x48.png",
       "128": "images/WinaLive128x128.png"
     },
+    "web_accessible_resources": [
+      "images/WinaLiveOff32x32.png"
+    ],
     "manifest_version": 2,
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
 }

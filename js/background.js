@@ -1,5 +1,6 @@
 var live = false; //live OFF
 var quiz = false; // aucun quiz n'est pour l'instant actif
+var notif = false;
 
 function fetchWeekPlanning()
 {
@@ -129,6 +130,13 @@ function getNextLive()
 //Si Non live --> Redirection donc OFF donc on récupère le temps dans l'élément correspondant et on set un timer
 function checkLive()
 {
+  chrome.storage.sync.get(['notif'],function(res)
+  {
+    if(res.notif)
+    {
+      notif = true;
+    }
+  });
   console.log("--CHECK LIVE--");
     fetch("https://www.winamax.fr/winamax-tv")
     .then(function(response) {
@@ -145,7 +153,18 @@ function checkLive()
           if(!live)
           {
             live = true;
-            //notification
+            if(notif)
+            {
+              var opt = {
+                  type: 'basic',
+                  title: 'LIVE ON',
+                  message: 'Rendez vous sur winamax.tv  pour voir le live',
+                  priority: 1,
+                  iconUrl:'images/WinaLiveOff32x32.png'
+
+              };
+              chrome.notifications.create('id', opt, function(id) {});
+            }
           }
         }
         updateHTML();
@@ -159,6 +178,50 @@ function checkLive()
 function checkQuiz() // function to check if there is a quizz of not
 {
   console.log("-CHECK QUIZ--");
+  chrome.storage.sync.get(['notif'],function(res)
+  {
+    if(res.notif)
+    {
+      notif = true;
+    }
+  });
+  fetch("https://www.winamax.fr/betting/tv/chat.php")
+  .then(function(response) {
+    response.text().then(function(text) {
+      let divQuestion = "La grille des programmes - Winamax";
+      if(!text.includes(divQuestion)) // OFF
+      {
+        if(quiz)
+        {
+          quiz = false;
+        }
+      }
+      else { // ON
+        if(!quiz)
+        {
+          quiz = true;
+          chrome.storage.sync.set({squiz : quiz});
+          chrome.browserAction.setBadgeText({text:"Quiz"});
+          chrome.browserAction.setBadgeBackgroundColor({color:"yellow"});
+          if(notif)
+          {
+            var opt = {
+                type: 'basic',
+                title: 'Question !',
+                message: 'Ouvrez l\'addon pour répondre à la question !',
+                priority: 1,
+                iconUrl:'images/WinaLiveOff32x32.png'
+
+            };
+            chrome.notifications.create('id', opt, function(id) {});
+          }
+        }
+      }
+    });
+  })
+  .catch((error) => {
+  console.log("Fetch Quiz : "+error)
+  });
 }
 
 function main()
@@ -167,12 +230,10 @@ function main()
   checkLive(); // pour mettre a jour la variable live
   if(!live) //OFF
   {
-    console.log("LIVE OFF");
     getNextLive();
   }
   else //ON
   {
-    console.log("LIVE ON");
     checkQuiz();
     console.log("Next Checks in 2 mins");
     setTimeout(function(){main()}, 120000);

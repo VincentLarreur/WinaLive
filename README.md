@@ -22,9 +22,9 @@ Functionalities:
 
 [ ] Answer Quiz system
 
-[ ] Auto-collect ticket Freeroll
+[x] Auto-collect ticket Freeroll
 
-[ ] Notification system
+[x] Notification system
 
 ------------------------------
 List of changements:

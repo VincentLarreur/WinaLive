@@ -340,9 +340,9 @@ a
 {
   background: #999;
 }
-div#container
+div#containerIframe
 {
-    border: 1px solid #888; overflow: hidden; max-height: 200px;
+    border: 1px solid #888; overflow: hidden; max-height: 60px;
 }
 /*-----------------------------------------*/
 /*---------------WAITING CIRCLE------------*/

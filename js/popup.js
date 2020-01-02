@@ -15,7 +15,7 @@ const waitingCircle = document.querySelector("#waitingCircle");
 const textFreeroll = document.querySelector("#textFreeroll");
 const divBoutonsTicket = document.querySelector("#divBoutontickets");
 const boutonsTicket = document.querySelector("#get_tickets");
-const container = document.querySelector("#container");
+const containerIframe = document.querySelector("#containerIframe");
 const cyacolor = document.querySelector(".cya-color");
 const boxTitle = document.querySelector(".box-title");
 const sublive = document.querySelector("#sub-live")
@@ -135,36 +135,34 @@ function handleConnection(quiz, tickets, freeroll)
           let onejan = new Date(now.getFullYear(), 0, 1);
           currentWeekNB = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
           currentDayNB = now.getDay();
+          let change = false;
           if(!res.hasOwnProperty('weekNb'))
           {
+            change = true;
             chrome.storage.sync.set({weekNb : currentWeekNB});
             res.weekNb = currentWeekNB;
           }
           if(!res.hasOwnProperty('dayNb'))
           {
+            change = true;
             chrome.storage.sync.set({dayNb : currentDayNB});
             res.dayNb = currentDayNB;
           }
-          if(res.weekNb != currentWeekNB || res.dayNb != currentDayNB)
+          if((res.weekNb != currentWeekNB || res.dayNb != currentDayNB) && !change )
           {
-            container.style.display = 'block';
-            // var formData = new FormData(); --> a tester
-            // formData.append("get_tickets", "Recevoir mes tickets");
-            // var request = new XMLHttpRequest();
-            // request.open("POST", "https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll");
-            // request.send(formData);
+            containerIframe.style.display = 'block';
             var ifrm = document.createElement('iframe');
             ifrm.setAttribute('id', 'ifrm'); // assign an id
-            container.appendChild(ifrm);
+            containerIframe.appendChild(ifrm);
             ifrm.setAttribute('src', 'https://www.winamax.fr/les-tournois_tous-les-tournois_sit-go-freeroll');
             ifrm.setAttribute('scrolling', 'no');
-            ifrm.setAttribute('style', 'border: 0px none; height: 800px; margin-top: -550px; width: 400px;');
+            ifrm.setAttribute('style', 'border: 0px none; height: 800px; margin-top: -620px; width: 400px;');
           }
           else {
           {
-            container.style.display = 'none';
-            while (container.firstChild) {
-              container.removeChild(container.firstChild);
+            containerIframe.style.display = 'none';
+            while (containerIframe.firstChild) {
+              containerIframe.removeChild(containerIframe.firstChild);
             }
           }
           }

@@ -10,6 +10,7 @@ function fetchWeekPlanning()
       response.text().then(function(text) {
         let JSONString = text.substring(text.indexOf("days")+6, text.indexOf("\"highlight\"")-1);
         var obj = JSON.parse(JSONString);
+        console.log(obj);
         chrome.storage.sync.set({planning : obj});
       });
     })
@@ -37,6 +38,7 @@ function updateHTML()
 
 function getNextLive()
 {
+  console.log("---Get Next Live---");
   var timernext = 120000;
   var d = new Date();
   var n = d.getDay();
@@ -76,7 +78,7 @@ function getNextLive()
       today=res.planning.S;
       tomorrow=res.planning.Su;
       break;
-    case 7:
+    case 0:
       today=res.planning.Su;
       tomorrow=res.planning.M;
       break;
@@ -247,6 +249,7 @@ function init()
   let now = new Date();
   let onejan = new Date(now.getFullYear(), 0, 1);
   currentWeekNB = Math.ceil( (((now - onejan) / 86400000) + onejan.getDay() + 1) / 7 );
+  fetchWeekPlanning(); // ici car en espagne, le premier fetch planning rate a cause du temps nécessaire a la mise en place du vpn
   chrome.storage.sync.get(['weekNb'],function(res)
   {
     if(!res.hasOwnProperty('weekNb'))

@@ -1,33 +1,27 @@
 {
-    "name": "WinaLive",
-    "version": "1.0",
-    "description": "Notify Live & Freeroll and let you participate to Winamax Quiz in Chat",
-    "author": "Vincent Larreur",
-    "permissions":
-    [
-      "notifications",
-      "storage",
-      "http://winamax.fr/"
-    ],
-    "background": {
-      "scripts": ["js/background.js"],
-      "persistent": true
-    },
-    "browser_action": {
-      "default_popup": "html/popup.html",
-      "default_icon": {
-        "32": "images/WinaLiveOff32x32.png"
-      }
-    },
-    "icons": {
-      "16": "images/WinaLive16x16.png",
-      "32": "images/WinaLiveOff32x32.png",
-      "48": "images/WinaLive48x48.png",
-      "128": "images/WinaLive128x128.png"
-    },
-    "web_accessible_resources": [
-      "images/WinaLiveOff32x32.png"
-    ],
-    "manifest_version": 2,
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "name": "WinaLive",
+  "version": "2.0",
+  "description": "Notify Live & Freeroll and let you participate to Winamax Quiz in Chat",
+  "permissions": ["storage"],
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": true
+  },
+  "page_action": {
+    "default_popup": "html/popup.html",
+    "default_icon": {
+      "16": "resources/images/WinaLive16x16.png",
+      "32": "resources/images/WinaLive32x32.png",
+      "48": "resources/images/WinaLive48x48.png",
+      "128": "resources/images/WinaLive128x128.png"
+    }
+  },
+  "icons": {
+    "16": "resources/images/WinaLive16x16.png",
+    "32": "resources/images/WinaLive32x32.png",
+    "48": "resources/images/WinaLive48x48.png",
+    "128": "resources/images/WinaLive128x128.png"
+  },
+  "author": "Vincent Larreur",
+  "manifest_version": 2
 }

@@ -1,32 +1,11 @@
 # WinaLive
-An web add-on to notify live on Winamax TV, Freeroll time, Quizz time and automatically collect Freeroll tickets
 
+**WinalLive V2** 
 
+Use javascript
 
-Functionalities:
----------------------
-
-[X] - Done
-
-[ ] - Not Done yet
-
----------------------
-
-[X] Basic Interface
-
-[X] Freeroll on Interface
-
-[X] CheckLive & update HTML
-
-[ ] CheckQuiz & collect Question
-
-[ ] Answer Quiz system
-
-[x] Auto-collect ticket Freeroll
-
-[x] Notification system
-
-------------------------------
-List of changements:
------------------------
-Main Loop Done
+Note : this project is following chrome extension guidelines :
+- to produce chrome extension
+  https://developer.chrome.com/extensions/getstarted
+- to fetch and web-scrap
+  https://github.com/puppeteer/puppeteer

@@ -2,12 +2,12 @@
   "name": "WinaLive",
   "version": "2.0",
   "description": "Notify Live & Freeroll and let you participate to Winamax Quiz in Chat",
-  "permissions": ["storage"],
+  "permissions": ["storage", "notifications"],
   "background": {
     "scripts": ["js/background.js"],
     "persistent": true
   },
-  "page_action": {
+  "browser_action": {
     "default_popup": "html/popup.html",
     "default_icon": {
       "16": "resources/images/WinaLive16x16.png",

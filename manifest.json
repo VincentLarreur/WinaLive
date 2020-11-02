@@ -10,17 +10,17 @@
   "browser_action": {
     "default_popup": "html/popup.html",
     "default_icon": {
-      "16": "resources/images/WinaLive16x16.png",
-      "32": "resources/images/WinaLive32x32.png",
-      "48": "resources/images/WinaLive48x48.png",
-      "128": "resources/images/WinaLive128x128.png"
+      "16": "resources/images/icons/16x16.png",
+      "32": "resources/images/icons/32x32.png",
+      "48": "resources/images/icons/48x48.png",
+      "128": "resources/images/icons/128x128.png"
     }
   },
   "icons": {
-    "16": "resources/images/WinaLive16x16.png",
-    "32": "resources/images/WinaLive32x32.png",
-    "48": "resources/images/WinaLive48x48.png",
-    "128": "resources/images/WinaLive128x128.png"
+    "16": "resources/images/icons/16x16.png",
+    "32": "resources/images/icons/32x32.png",
+    "48": "resources/images/icons/48x48.png",
+    "128": "resources/images/icons/128x128.png"
   },
   "author": "Vincent Larreur",
   "manifest_version": 2

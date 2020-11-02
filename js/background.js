@@ -1,5 +1,5 @@
 /*
-*   CONSTANTE
+*   CONSTANTES
 */
 
 const WINAMAX_GRILLE_URL = "https://www.winamax.fr/winamax-tv-grille";
@@ -8,10 +8,34 @@ const WINAMAX_TV_URL = "https://www.winamax.fr/winamax-tv";
 const WINAMAX_TITLE = "La grille des programmes - Winamax";
 
 /*
-*   CONSTANTE
+*   VARIABLES
 */
 
-var live;
+var live = false;
+var todayPlanning;
+var tomorrowPlanning;
+
+/*
+*   COMMON FUNCTION
+*/
+
+function liveOn() {
+    chrome.browserAction.setBadgeText({text:"On"});
+    chrome.browserAction.setBadgeBackgroundColor({color:"green"});
+}
+
+function liveOff() {
+    chrome.browserAction.setBadgeText({text:"Off"});
+    chrome.browserAction.setBadgeBackgroundColor({color:"red"});
+}
+
+function update() {
+    if(live) {
+        liveOn();
+        return;
+    }
+    liveOff();
+}
 
 /*
 *   INITIALISATION
@@ -67,6 +91,7 @@ function checkLive() {
     fetch(WINAMAX_TV_URL).then(function(response) {
         response.text().then(function(text) {
             live = !text.includes(WINAMAX_TITLE);
+            update();
             if(live) {
                 chrome.storage.sync.get(['notif'],function(res) {
                     let notif = (res.notif) ? true : false;
@@ -76,7 +101,7 @@ function checkLive() {
                             priority: 1,
                             title: 'LIVE ON',
                             message: 'Rendez vous sur winamax.tv pour voir le live',
-                            iconUrl: 'resources/images/WinaLive32x32.png'
+                            iconUrl: 'resources/images/icons/32x32.png'
                         };
                         chrome.notifications.create('ON_notification', opt, function(id) {});
                     }
@@ -88,6 +113,70 @@ function checkLive() {
     });
 }
 
+function setCurrentDayPlanning(planning) {
+    var n = new Date().getDay();
+    switch(n) {
+        case 0: // Sunday
+          today=planning.Su;
+          tomorrow=planning.M;
+          break;
+        case 1: // Monday
+          today=planning.M;
+          tomorrow=planning.T;
+          break;
+        case 2: // Tuesday
+          today=planning.T;
+          tomorrow=planning.W;
+          break;
+        case 3: // Wednesday
+          today=planning.W;
+          tomorrow=planning.Th;
+          break;
+        case 4: // Thursday
+          today=planning.Th;
+          tomorrow=planning.F;
+          break;
+        case 5: // Friday
+          today=planning.F;
+          tomorrow=planning.S;
+          break;
+        case 6: // Saturday
+          today=planning.S;
+          tomorrow=planning.Su;
+          break;
+    }
+}
+
+function waitNextLive() {
+    chrome.storage.sync.get(['planning'],function(res) {
+        if(!res.hasOwnProperty('planning')) {
+            fetchWeekPlanning();
+            waitNextLive();
+            return;
+        }
+        
+        setCurrentDayPlanning(res.planning);
+
+        let i = 0;
+        let nextLive;
+        let now = new Date();
+        while(i<today.length && nextLive == undefined) {
+            let start = new Date(today[i].start_date);
+            if(start > now ) {
+                nextLive = today[i];
+            }
+            i++;
+        }
+        if(nextLive == undefined) {
+            nextLive = tomorrow[0];
+        }
+        chrome.storage.sync.set({nextLive : nextLive});
+        let timerNext = (new Date(today[i].start_date))-now;
+        setTimeout(function(){main()}, timerNext);
+    });
+
+}
+
 /*
 *   CheckLive
 *   OFF : wait for the next Live known from planning
@@ -96,7 +185,7 @@ function checkLive() {
 function main() {
     checkLive();
     if(!live) {
-        //getNextLive();
+        waitNextLive();
     }
     else {
         //checkQuiz();

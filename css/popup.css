@@ -1,0 +1,33 @@
+body {
+    width: 300px;
+    min-height: 300px;
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", Arial, sans-serif;
+}
+
+header {
+    border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.logo {
+    height: 30px;
+    width: 30px;
+}
+
+a {
+    margin: 10 10 10 10;
+    font-size: 25px;
+    color: #a3353e;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+main {
+
+}
+
+footer {
+    border-top: 1px solid rgba(0,0,0,.06);
+}

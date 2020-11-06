@@ -6,38 +6,41 @@
     </head>
     <body>
         <header>
-            <div>
-                <img class="logo"
-                    src="../resources/images/Popup/off_icon.svg">
-                WINALIVE
-            </div>
+            <a id="winalive" target="_blank" href="https://www.winamax.fr/winamax-tv">
+                <div>
+                    <img id="logo" class="logo"
+                        src="../resources/images/Popup/off_icon.svg">
+                    WINALIVE
+                </div>
+            </a>
         </header>
         <main>
-            <div id="live">
-                Aucune d'informations sur le prochain live
+            <div class="tooltip" id="live">
+                    <p id="liveText">Aucune d'informations sur le prochain live</p>
+                    <span id="liveInfo" class="tooltiptext">
+                            Début - <p id ="startHour"></p><br/>
+                            End - <p id ="endHour"></p><br/>
+                            Présentateur - <p id ="presenters"></p><br/>
+                            Journalistes - <p id ="journalist"></p><br/>
+                    </span>
+                    <span id="liveClock" class="badgeHoraire">
+                        {horaire}
+                </div>
             </div>
-            <div id="freeroll">
-                Aucune d'informations sur le prochain Freeroll
+            <div class="tooltip2" id="freeroll">
+                    <p id="freerollText">Aucune d'informations sur le prochain Freeroll</p>
+                    <span class="tooltiptext2">
+                        Enregistrement <br/>
+                        <i>Anticipé <b>30</b> min <br/>
+                        Tardif <b>24</b> min</i>
+                    </span>
+                <span id="freerollClock" class="badgeHoraire">
+                    {horaire}
+                </span>
             </div>
         </main>
         <footer>
             <div>
-                <div>
-                    <label>Freeroll</label>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-
-                <div>
-                    <label>Notifs</label>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-
                 <div>
                     <label>Tickets</label>
                     <label class="switch">
@@ -48,6 +51,14 @@
 
                 <div>
                     <label>Quiz</label>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div>
+                    <label>Notifs</label>
                     <label class="switch">
                         <input type="checkbox">
                         <span class="slider round"></span>

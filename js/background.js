@@ -107,6 +107,7 @@ function checkLive() {
                     }
                 });
             }
+            chrome.storage.sync.set({isLive : live});
         });
     }).catch((error) => {
         console.log("Error fetching - Live : "+error)
@@ -170,7 +171,7 @@ function waitNextLive() {
         if(nextLive == undefined) {
             nextLive = tomorrow[0];
         }
-        chrome.storage.sync.set({nextLive : nextLive});
+        chrome.storage.sync.set({live : nextLive});
         let timerNext = (new Date(today[i].start_date))-now;
         setTimeout(function(){main()}, timerNext);
     });

@@ -1,15 +1,9 @@
 /*
 *   TEXTES
 */
-const nextLiveText = "Prochain live : {titre} - [{horaire}]";
-const nextFreerollText = "Prochain Freeroll : {interval} - [{horaire}]";
-const nowFreerollText = "Le FreeRoll, c'est maintenant !";
-
-/*
-*   CONSTANTES HTML elements
-*/
-const live = document.querySelector('#live');
-const freeroll = document.querySelector('#freeroll');
+const nextLiveText = "Prochain live : {titre}";
+const currentLiveText = "Live en cours : {titre}";
+const nextFreerollText = "Prochain Freeroll";
 
 /*
 *   CONSTANTES
@@ -27,13 +21,32 @@ function stringHoraire(horaire) {
     return d.toLocaleTimeString([], {timeStyle: 'short'});
 }
 
-chrome.storage.sync.get(["nextLive"],function(res) {
-    live.innerText = nextLiveText
-        .replace('{titre}', res.nextLive.title)
-        .replace('{horaire}', stringHoraire(res.nextLive.start_date));
+/*
+* -- Handle live --
+* Get from storage the live to
+* display on the popup
+*/
+chrome.storage.sync.get(["live", "isLive"],function(res) {
+    let start = stringHoraire(res.live.start_date);
+    liveClock.innerText = start;
+    presenters.innerText = res.live.presenters;
+    startHour.innerText = start;
+    endHour.innerText = stringHoraire(res.live.end_date);
+    journalist.innerText = res.live.journalists;
+    if(res.isLive) {
+        logo.src = '../resources/images/Popup/on_icon.svg';
+        liveText.innerText = currentLiveText.replace('{titre}', res.live.title);
+        return;
+    }
+    logo.src = '../resources/images/Popup/off_icon.svg';
+    liveText.innerText = nextLiveText.replace('{titre}', res.live.title);
 });
 
-
+/*
+* -- Handle freeroll --
+* Get from storage the planning of freerolls
+* to display the corresponding one on the popup
+*/
 chrome.storage.sync.get(["planningFreeroll"],function(res)
 {
     if(!res.hasOwnProperty('planningFreeroll'))
@@ -55,16 +68,6 @@ chrome.storage.sync.get(["planningFreeroll"],function(res)
     {
         j++;
     }
-    let interval = res.planningFreeroll[j]-current;
-    let hours = Math.floor(interval / msecPerHour);
-    interval = interval - (hours*msecPerHour);
-    let minutes = Math.floor(interval / msecPerMinute);
-    if(minutes == 0) {
-        freeroll.innerText = nowFreerollText;
-        return;
-    }
-    current.setHours(hours, minutes);
-    freeroll.innerText = nextFreerollText
-        .replace('{interval}', stringHoraire(new Date(current)))
-        .replace('{horaire}', stringHoraire(res.planningFreeroll[j]));
+    freerollText.innerText = nextFreerollText;
+    freerollClock.innerText = stringHoraire(res.planningFreeroll[j]);
 });

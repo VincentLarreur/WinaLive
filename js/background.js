@@ -2,8 +2,9 @@
 *   CONSTANTES
 */
 
-const WINAMAX_GRILLE_URL = "https://www.winamax.fr/winamax-tv-grille";
 const WINAMAX_TV_URL = "https://www.winamax.fr/winamax-tv";
+const WINAMAX_GRILLE_URL = "https://www.winamax.fr/winamax-tv-grille";
+const WINAMAX_TICKET_URL = "https://www.winamax.fr/account/login.php";
 
 const WINAMAX_TITLE = "La grille des programmes - Winamax";
 
@@ -55,6 +56,31 @@ function fetchWeekPlanning()
     });
 }
 
+function tickets() {
+    var XHR = new XMLHttpRequest();
+    var formData = new FormData();
+    formData.append("login", "vincent_lr@hotmail.com");
+    formData.append("password", "kaperobr5");
+
+
+    XHR.addEventListener('load', function(event) {
+        alert('Ouais ! Données envoyées et réponse chargée.');
+    });
+
+    XHR.addEventListener('error', function(event) {
+        alert('Oups! Quelque chose s\'est mal passé.');
+    });
+
+    XHR.open('POST', 'https://auth-api-eu-west-3.winamax.fr/core/authentication/token/authorize');
+
+    XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    
+    XHR.send(formData);
+
+}
+
+tickets();
+
 function getCurrentWeek() {
     now = new Date();
     //1rst of January
@@ -74,7 +100,6 @@ function init() {
         }
         if(!res.hasOwnProperty('planning') || res.week_nb != current_week_nb)
         {
-          console.log(res.week_nb);
           fetchWeekPlanning();
           chrome.storage.sync.set({week_nb : current_week_nb});
         }
@@ -163,7 +188,7 @@ function waitNextLive() {
         let now = new Date();
         while(i<today.length && nextLive == undefined) {
             let start = new Date(today[i].start_date);
-            if(start > now ) {
+            if(start > now) {
                 nextLive = today[i];
             }
             i++;
@@ -189,7 +214,6 @@ function main() {
         waitNextLive();
     }
     else {
-        //checkQuiz();
         setTimeout(function(){main()}, 120000);
     }
 }

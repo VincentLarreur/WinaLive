@@ -2,7 +2,12 @@
   "name": "WinaLive",
   "version": "2.0",
   "description": "Notify Live & Freeroll and let you participate to Winamax Quiz in Chat",
-  "permissions": ["storage", "notifications"],
+  "permissions": [
+    "storage", 
+    "notifications",
+    "http://winamax.fr/",
+    "http://auth-api-eu-west-3.winamax.fr"
+  ],
   "background": {
     "scripts": ["js/background.js"],
     "persistent": true

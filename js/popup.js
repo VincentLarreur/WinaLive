@@ -1,16 +1,19 @@
 /*
 *   TEXTES
 */
-const nextLiveText = "Prochain live : {titre}";
-const currentLiveText = "Live en cours : {titre}";
-const nextFreerollText = "Prochain Freeroll";
+const NEXT_LIVE_TEXT = "Prochain live : {titre}";
+const CURRENT_LIVE_TEXT = "Live en cours : {titre}";
+const NEXT_FREEROLL_TEXT = "Prochain Freeroll";
 
 /*
 *   CONSTANTES
 */
 
-var msecPerMinute = 1000 * 60;
-var msecPerHour = msecPerMinute * 60;
+const ON_LOGO_PATH = '../resources/images/Popup/on_icon.svg';
+const OFF_LOGO_PATH = '../resources/images/Popup/off_icon.svg';
+
+const msecPerMinute = 1000 * 60;
+const msecPerHour = msecPerMinute * 60;
 
 /*
 *   FUNCTIONS
@@ -20,6 +23,24 @@ function stringHoraire(horaire) {
     let d = new Date(horaire);
     return d.toLocaleTimeString([], {timeStyle: 'short'});
 }
+
+
+/*
+* -- Handle options --
+* Get from storage the options
+* to set the checkboxes to the 
+* corresponding state
+*/
+chrome.storage.sync.get(['notif','quiz','ticket'],function(res) {
+    notifCheckbox.checked = res.hasOwnProperty('notif') ? res.notif : false;
+    notifCheckbox.addEventListener('click',function(e) { chrome.storage.sync.set({notif : e.target.checked}); });
+
+    quizCheckbox.checked = res.hasOwnProperty('quiz') ? res.quiz : false;
+    quizCheckbox.addEventListener('click',function(e) { chrome.storage.sync.set({quiz : e.target.checked}); });
+
+    ticketCheckbox.checked = res.hasOwnProperty('ticket') ? res.ticket : false;
+    ticketCheckbox.addEventListener('click',function(e) { chrome.storage.sync.set({ticket : e.target.checked}); });
+});
 
 /*
 * -- Handle live --
@@ -34,12 +55,12 @@ chrome.storage.sync.get(["live", "isLive"],function(res) {
     endHour.innerText = stringHoraire(res.live.end_date);
     journalist.innerText = res.live.journalists;
     if(res.isLive) {
-        logo.src = '../resources/images/Popup/on_icon.svg';
-        liveText.innerText = currentLiveText.replace('{titre}', res.live.title);
+        logo.src = ON_LOGO_PATH;
+        liveText.innerText = CURRENT_LIVE_TEXT.replace('{titre}', res.live.title);
         return;
     }
-    logo.src = '../resources/images/Popup/off_icon.svg';
-    liveText.innerText = nextLiveText.replace('{titre}', res.live.title);
+    logo.src = OFF_LOGO_PATH;
+    liveText.innerText = NEXT_LIVE_TEXT.replace('{titre}', res.live.title);
 });
 
 /*
@@ -68,6 +89,6 @@ chrome.storage.sync.get(["planningFreeroll"],function(res)
     {
         j++;
     }
-    freerollText.innerText = nextFreerollText;
+    freerollText.innerText = NEXT_FREEROLL_TEXT;
     freerollClock.innerText = stringHoraire(res.planningFreeroll[j]);
 });

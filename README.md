@@ -1,5 +1,9 @@
 # WinaLive
 
+**WinalLive V1** 
+
+https://docs.google.com/document/d/1oOEz7J9EPK0HGwTa0W97w-XCHPqPpWrZDreZdVwTW5A/edit?usp=sharing
+
 **WinalLive V2** 
 
 Use javascript

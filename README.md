@@ -2,7 +2,7 @@
 
 **WinalLive V1** 
 
-https://docs.google.com/document/d/1oOEz7J9EPK0HGwTa0W97w-XCHPqPpWrZDreZdVwTW5A/edit?usp=sharing
+[1st version presentation](https://docs.google.com/document/d/1oOEz7J9EPK0HGwTa0W97w-XCHPqPpWrZDreZdVwTW5A/edit?usp=sharing)
 
 **WinalLive V2** 
 
